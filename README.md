@@ -1,6 +1,7 @@
 ## My Notes
  - Achieved all functionality for this project. Completed one reach goal which was low-level caching.
  - Refactors
+   - Edge case: User can select a time on todays date that is before the current time
    - Get image path fully from API and not hardcoded
    - Pagination in service
    - All reviews shown
