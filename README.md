@@ -1,14 +1,25 @@
+## My Notes
+ - Achieved all functionality for this project. Completed one reach goal which was low-level caching.
+ - Refactors
+   - Get image path fully from API and not hardcoded
+   - Pagination in service
+   - All reviews shown
+   - User Experience Improvements
+      - Old parties (past date) moved to a separate area
+      - HTML/CSS to make the viewing party's cards and on the movie show page
+   - Reassess columns in Viewing Party
+   - Listing movies in search might not need to have the full movie object made or somehow passes that movie object to the next page
+   - Extensions I'd like to implement
+      - OAuth
+      - Invites need to be accepted
+
 # Viewing Party
 
-This is the base repo for the [Viewing Party Lite project](https://backend.turing.io/module3/projects/viewing_party_lite) used for Turing's Backend Module 3.
+This is a forked repo for the [Viewing Party Lite project](https://backend.turing.io/module3/projects/viewing_party_lite) used for Turing's Backend Module 3.
 
 ### About this Project
 
 Viewing Part Lite is an application in which users can explore movie options and create a viewing party event for themselves and other users of the application.
-
-## Setup for the use of the project
-
-1. A conveyor belt link will be sent out at project kickoff so that you can both fork and copy the project board on this base repo. 
 
 ## Local Setup for any other use
 
