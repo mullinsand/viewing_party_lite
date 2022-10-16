@@ -16,7 +16,7 @@
 
 # Viewing Party
 
-This is a forked repo for the [Viewing Party Lite project](https://backend.turing.io/module3/projects/viewing_party_lite) used for Turing's Backend Module 3.
+This is a forked repo for the [Viewing Party Lite project](https://backend.turing.edu/module3/projects/viewing_party_lite/index) used for Turing's Backend Module 3.
 
 ### About this Project
 
