@@ -10,7 +10,9 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
+    user = user_params
+    user[:email] = user[:email].downcase
+    @user = User.new(user)
     if @user.valid?
       @user.save
       redirect_to user_path(@user)
@@ -27,14 +29,11 @@ class UsersController < ApplicationController
   def login_user
     user = User.find_by(email: params[:email])
 
-    if user.nil?
-      redirect_to login_path(@user)
-      flash[:alert] = 'Invalid Email'
-    elsif user.authenticate(params[:password])
+    if user && user.authenticate(params[:password])
       redirect_to user_path(user)
     else
       redirect_to login_path(@user)
-      flash[:alert] = 'Incorrect password'
+      flash[:alert] = user ? 'Incorrect password' : 'Invalid Email'
     end
   end
 
