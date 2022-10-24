@@ -12,6 +12,12 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of :password_digest }
 
     it { should have_secure_password }
+
+    it 'should store password as an encrypted string as password_digest' do
+      user = create(:user, password: 'password123', password_confirmation: 'password123')
+      expect(user).to_not have_attribute(:password)
+      expect(user.password_digest).to_not eq('password123')
+    end
   end
 
   describe 'relationships' do

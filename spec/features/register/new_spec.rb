@@ -33,10 +33,65 @@ RSpec.describe 'The register new user page' do
           expect(current_path).to eq(user_path(User.find_by(user_name: 'Kat')))
         end
       end
-      context 'if email has already been used' do
-        it 'when I click the register button I am redirected back register page if that email has been taken' do
-          @kat = User.create!(user_name: 'Kat', email: 'kit.kat@guhmail.com')
+
+      context 'if password field is not filled in' do
+        it 'when I click the register button I am redirected back register page' do
+
+          fill_in 'Name:', with: 'Kit'
+          fill_in 'Email:', with: 'kit.kat@guhmail.com'
+          # fill_in 'Password:', with: 'Test'
+          # fill_in 'Password Confirmation:', with: 'Test1'
+          click_button 'Create User'
     
+          expect(current_path).to eq(register_path)
+          expect(page).to have_content("Password digest can't be blank and Password can't be blank")
+        end
+      end
+
+      context 'if the one password field is not filled in' do
+        it 'when I click the register button I am redirected back register page' do
+
+          fill_in 'Name:', with: 'Kit'
+          fill_in 'Email:', with: 'kit.kat@guhmail.com'
+          fill_in 'Password:', with: 'Test'
+          # fill_in 'Password Confirmation:', with: 'Test1'
+          click_button 'Create User'
+    
+          expect(current_path).to eq(register_path)
+          expect(page).to have_content("Password confirmation doesn't match Password")
+        end
+
+        it 'when I click the register button I am redirected back register page' do
+
+          fill_in 'Name:', with: 'Kit'
+          fill_in 'Email:', with: 'kit.kat@guhmail.com'
+          # fill_in 'Password:', with: 'Test'
+          fill_in 'Password Confirmation:', with: 'Test1'
+          click_button 'Create User'
+    
+          expect(current_path).to eq(register_path)
+          expect(page).to have_content("Password can't be blank")
+        end
+      end
+
+      context 'if the passwords dont match' do
+        it 'when I click the register button I am redirected back register page' do
+
+          fill_in 'Name:', with: 'Kit'
+          fill_in 'Email:', with: 'kit.kat@guhmail.com'
+          fill_in 'Password:', with: 'Test'
+          fill_in 'Password Confirmation:', with: 'Test1'
+          click_button 'Create User'
+    
+          expect(current_path).to eq(register_path)
+          expect(page).to have_content("Password confirmation doesn't match Password")
+        end
+      end
+      
+      context 'if email has already been used' do
+        it 'when I click the register button I am redirected back register page' do
+          @kat = create(:user, email: 'kit.kat@guhmail.com')
+
           fill_in 'Name:', with: 'Kit'
           fill_in 'Email:', with: 'kit.kat@guhmail.com'
           fill_in 'Password:', with: 'Test'
