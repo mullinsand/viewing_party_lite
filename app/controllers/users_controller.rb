@@ -20,6 +20,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def login_form
+
+  end
+
+  def login_user
+    user = User.find_by(email: params[:email])
+    if user.authenticate(params[:password])
+      redirect_to user_path(user)
+    else
+      redirect_to login_path(@user)
+      flash[:alert] = 'Incorrect password'
+    end
+  end
+
   private
 
   def user_params
