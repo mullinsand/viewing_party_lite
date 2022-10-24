@@ -26,7 +26,11 @@ class UsersController < ApplicationController
 
   def login_user
     user = User.find_by(email: params[:email])
-    if user.authenticate(params[:password])
+
+    if user.nil?
+      redirect_to login_path(@user)
+      flash[:alert] = 'Invalid Email'
+    elsif user.authenticate(params[:password])
       redirect_to user_path(user)
     else
       redirect_to login_path(@user)
@@ -38,6 +42,10 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:user_name, :email, :password, :password_confirmation)
+  end
+
+  def incorrect_email
+    flash[:alert] = 'Invalid Email'
   end
 end
 

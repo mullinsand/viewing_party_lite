@@ -33,7 +33,7 @@ RSpec.describe 'Login Page' do
       end
     end
 
-    context 'filling in incorrect email' do
+    context 'filling in correct email and incorrect password' do
       it 'redirect registered user back to login page with error message' do
 
         fill_in 'Email:', with: @user.email
@@ -45,8 +45,16 @@ RSpec.describe 'Login Page' do
       end
     end
 
-    context 'filling in correct email and incorrect password' do
+    context 'filling in incorrect email' do
+      it 'redirect registered user back to login page with error message' do
 
+        fill_in 'Email:', with: 'user@email.stuff'
+        fill_in 'Password:', with: 'Test1'
+        click_button 'Log In'
+  
+        expect(current_path).to eq(login_path)
+        expect(page).to have_content('Invalid Email')
+      end
     end
   end
 end
