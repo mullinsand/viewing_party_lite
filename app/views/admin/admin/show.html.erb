@@ -1,0 +1,11 @@
+<div id='default_users_emails'>
+
+  <h1> Existing Users </h1>
+  
+  <% @users.each do |user| %>
+    <div id="user_<%=user.id%>">
+      <%= link_to user.email, admin_user_path(user) %> <br>
+    </div>
+  <% end %>
+
+</div>

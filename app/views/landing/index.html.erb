@@ -6,20 +6,20 @@
 <br>
 <br>
 <% if session[:user_id].nil? %>
-<%= button_to "Create New User", '/register', method: :get %>
-<%= button_to "Log In", '/login', method: :get %>
+  <%= button_to "Create New User", '/register', method: :get %>
+  <%= button_to "Log In", '/login', method: :get %>
 <% else %>
-<%= button_to "Log Out", '/logout', method: :delete %>
+  <%= button_to "Log Out", '/logout', method: :delete %>
 
-<div id='existing-users'>
+  <div id='existing-users'>
 
-  <h1> Existing Users </h1>
-  
-  <% @users.each do |user| %>
-    <%= user.email %> <br>
-  <% end %>
+    <h1> Existing Users </h1>
+    
+    <% @users.each do |user| %>
+      <%= user.email %> <br>
+    <% end %>
 
-</div>
+  </div>
 <% end %>
 <br>
 <br>

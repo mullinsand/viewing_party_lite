@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
-require 'faker'
+
 
 RSpec.describe 'User Show Page' do
   describe 'As a visitor, when I visit the show page' do
@@ -12,7 +10,7 @@ RSpec.describe 'User Show Page' do
       expect(page).to have_content('You must be logged in to access the dashboard')
     end
   end
-  
+
   describe 'As a user when I visit the show page' do
     before :each do
       @user = create(:user, email: 'kit.kat@guhmail.com', password: 'Test')

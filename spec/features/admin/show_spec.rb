@@ -27,9 +27,10 @@ RSpec.describe 'Admin dashboard' do
       end
 
       it 'each email address is a link to the admin users dashboard' do
+
         within '#default_users_emails' do
           @users.each do |user|
-            within "user_#{user.id}" do
+            within "#user_#{user.id}" do
               click_link(user.email)
               expect(current_path).to eq(admin_user_path(user))
               visit admin_dashboard_path

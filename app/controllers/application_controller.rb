@@ -14,4 +14,13 @@ class ApplicationController < ActionController::Base
     flash[:alert] = "You must be logged in to access the #{page}"
     redirect_back(fallback_location: root_path)
   end
+
+  def authorized
+    unauthorized unless @user.role == "admin"
+  end
+
+  def unauthorized
+    flash[:alert] = 'You are not authorized to access these pages'
+    redirect_back(fallback_location: root_path)
+  end
 end

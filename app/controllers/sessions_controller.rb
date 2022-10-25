@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
 
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to dashboard_path(user)
+      user.role == 'admin' ? (redirect_to admin_dashboard_path) : (redirect_to dashboard_path)
     else
       redirect_to login_path(@user)
       flash[:alert] = user ? 'Incorrect password' : 'Invalid Email'

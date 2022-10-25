@@ -13,8 +13,9 @@ RSpec.describe 'Admin Users show page' do
         fill_in 'Password:', with: @admin.password
         click_button 'Log In'
 
-        visit admin_user_path(@user)
-        expect(current_path).to eq(admin_user_path(@user))
+        visit admin_user_path(@users[0])
+
+        expect(current_path).to eq(admin_user_path(@users[0]))
         expect(page).to have_content('Hosted Viewing Parties')
       end
     end
