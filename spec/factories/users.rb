@@ -7,5 +7,6 @@ FactoryBot.define do
     user_name { Faker::Internet.username }
     email { Faker::Internet.email }
     password { Faker::Internet.password }
+    role { 'default' }
   end
 end

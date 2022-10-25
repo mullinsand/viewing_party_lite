@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'New Viewing Party' do
-  
+  # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+  # allow_any_instance_of(ApplicationController).to receive(:user_id_in_session).and_return(user.id)
   describe 'as a visitor, when I visit the new viewing party page' do
     it 'returns me to the landing page with a flash message' do
       VCR.use_cassette('fight_club_movie_data_v3', allow_playback_repeats: true) do
