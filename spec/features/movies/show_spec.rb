@@ -1,17 +1,17 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
-require 'faker'
 
 RSpec.describe 'Movie Details Page' do
   describe 'As a user when I visit the movie details page' do
     before(:each) do
-      VCR.use_cassette('fight_club_movie_data_v1') do
-        @alex = User.create!(user_name: 'Alex', email: Faker::Internet.email,
-                              password_digest: Faker::Internet.password)
-    
+      @user = create(:user, email: 'kit.kat@guhmail.com', password: 'Test')
+
+      visit login_path
+      fill_in 'Email:', with: @user.email
+      fill_in 'Password:', with: @user.password
+      click_button 'Log In'
+      VCR.use_cassette('fight_club_movie_data_v2') do
         @fight_club = double(id: 550, title: 'Fight Club')
-        visit user_movie_path(@alex, @fight_club.id)
+        visit dashboard_movie_path(@fight_club.id)
       end
     end
     it 'I see a button to create a viewing party' do
@@ -27,7 +27,7 @@ RSpec.describe 'Movie Details Page' do
     end
 
     it 'I see the vote Average of the movie' do
-      expect(page).to have_content("Vote Average: 8.433")
+      expect(page).to have_content("Vote Average: 8.427")
     end
 
     it 'I see the runtime in hours & minutes of the movie' do

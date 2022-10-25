@@ -30,7 +30,7 @@ RSpec.describe 'The register new user page' do
           fill_in 'Password Confirmation:', with: 'Test'
           click_button 'Create User'
     
-          expect(current_path).to eq(user_path(User.find_by(user_name: 'Kat')))
+          expect(current_path).to eq(dashboard_path(User.find_by(user_name: 'Kat')))
         end
       end
 

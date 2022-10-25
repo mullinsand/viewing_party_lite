@@ -3,8 +3,15 @@ require 'rails_helper'
 RSpec.describe 'New Viewing Party' do
   
   before :each do
-    VCR.use_cassette('fight_club_movie_data_v1') do
-      @user = create(:user)
+    VCR.use_cassette('fight_club_movie_data_v3') do
+
+      @user = create(:user, email: 'kit.kat@guhmail.com', password: 'Test')
+
+      visit login_path
+      fill_in 'Email:', with: @user.email
+      fill_in 'Password:', with: @user.password
+      click_button 'Log In'
+
       @friend1 = create(:user)
       @friend2 = create(:user)
       @friend3 = create(:user)
@@ -13,7 +20,7 @@ RSpec.describe 'New Viewing Party' do
       fight_club = File.read('spec/fixtures/fight_club.json')
       movie_data = JSON.parse(fight_club, symbolize_names: true)
       @movie = Movie.new(movie_data)
-      visit new_user_movie_viewing_party_path(@user, @movie.id)
+      visit new_dashboard_movie_viewing_party_path(@movie.id)
     end
   end
 
@@ -63,7 +70,7 @@ RSpec.describe 'New Viewing Party' do
           end
           click_button 'Create Viewing party'
 
-          expect(current_path).to eq(user_path(@user))
+          expect(current_path).to eq(dashboard_path(@user))
           new_viewing_party = ViewingParty.last
           within "#hosted_parties" do
             expect(page).to have_css("#party_#{new_viewing_party.id}")
@@ -81,12 +88,15 @@ RSpec.describe 'New Viewing Party' do
           end
           click_button 'Create Viewing party'
           new_viewing_party = ViewingParty.last
-          @friends.each do |user|
-            visit user_path(user)
-            within "#invited_parties" do
-              expect(page).to have_css("#party_#{new_viewing_party.id}")
-              expect(page).to have_link(new_viewing_party.movie_title)
-            end
+
+          visit login_path
+          fill_in 'Email:', with: @friend1.email
+          fill_in 'Password:', with: @friend1.password
+          click_button 'Log In'
+
+          within "#invited_parties" do
+            expect(page).to have_css("#party_#{new_viewing_party.id}")
+            expect(page).to have_link(new_viewing_party.movie_title)
           end
         end
       end

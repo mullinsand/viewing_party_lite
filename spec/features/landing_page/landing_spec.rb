@@ -62,16 +62,14 @@ RSpec.describe "Landing Page" do
       end
 
       it 'should show the user email' do
-        user = create(:user)
-
+        users = User.all
         visit root_path
 
         within("#existing-users") do
-          expect(page).to have_link("#{user.email}")
-          click_link "#{user.email}"
+          users.each do |user|
+            expect(page).to have_content(user.email)
+          end
         end
-
-        expect(current_path).to eq user_path(user)
       end
     end
   end

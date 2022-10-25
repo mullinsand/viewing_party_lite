@@ -29,7 +29,7 @@ RSpec.describe 'Login Page' do
         fill_in 'Password:', with: 'Test'
         click_button 'Log In'
   
-        expect(current_path).to eq(user_path(@user))
+        expect(current_path).to eq(dashboard_path(@user))
       end
     end
 
