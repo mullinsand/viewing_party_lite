@@ -3,13 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Login Page' do
 
   
-  describe 'As a user when I visit the landing' do
-    it 'I see a Log In button' do
-      visit root_path
-      # save_and_open_page
-      expect(page).to have_button('Log In')
-    end
-  end
+
 
   describe 'As a registered user when I visit the login page' do
     before(:each) do
@@ -29,7 +23,7 @@ RSpec.describe 'Login Page' do
         fill_in 'Password:', with: 'Test'
         click_button 'Log In'
   
-        expect(current_path).to eq(user_path(@user))
+        expect(current_path).to eq(dashboard_path)
       end
     end
 

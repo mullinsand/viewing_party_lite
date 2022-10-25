@@ -1,29 +1,41 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
-require 'faker'
+
 
 RSpec.describe 'User Show Page' do
+  describe 'As a visitor, when I visit the show page' do
+    it 'I am redirected back to landing with a message' do
+      visit dashboard_path
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content('You must be logged in to access the dashboard')
+    end
+  end
+
   describe 'As a user when I visit the show page' do
+    before :each do
+      @user = create(:user, email: 'kit.kat@guhmail.com', password: 'Test')
+
+      visit login_path
+      fill_in 'Email:', with: @user.email
+      fill_in 'Password:', with: @user.password
+      click_button 'Log In'
+    end
     it 'Has my username' do
-      @user = create(:user)
-      visit user_path(@user)
+
+      visit dashboard_path(@user)
 
       expect(page).to have_content(@user.user_name)
     end
 
     it 'has a button to Discover Movies which leads to the discover page' do
-      @user = create(:user)
-      visit user_path(@user)
-
+      visit dashboard_path(@user)
       click_button('Discover Movies')
-      expect(current_path).to eq(user_discover_path(@user))
+      expect(current_path).to eq(discover_dashboard_path(@user))
     end
 
     describe 'viewing parties invited to list' do
       before :each do
         Faker::UniqueGenerator.clear
-        @user = create(:user)
         @awesome_host = create(:user)
         @other_user = create(:user)
         # create 4 viewing parties each hosted by awesome_host
@@ -47,7 +59,7 @@ RSpec.describe 'User Show Page' do
         # creates viewing party where only the user is invited
         @lonely_viewing_party = create(:viewing_party, host: @user.user_name, movie_id: 550)
         create(:viewing_party_user, viewing_party: @lonely_viewing_party, user: @user)
-        visit user_path(@user)
+        visit dashboard_path(@user)
       end
       context 'when invited to a viewing party' do
         it 'shows that viewing party on page' do
@@ -74,7 +86,7 @@ RSpec.describe 'User Show Page' do
               within "#party_#{party.id}" do
                 expect(page).to have_link(party.movie_title)
                 click_link("#{party.movie_title}")
-                expect(current_path).to eq(user_movie_path(@user, party.movie_id))
+                expect(current_path).to eq(dashboard_movie_path(party.movie_id))
               end
             end
           end
@@ -166,7 +178,6 @@ RSpec.describe 'User Show Page' do
     describe 'viewing parties hosting list' do
       before :each do
         Faker::UniqueGenerator.clear
-        @user = create(:user)
         @awesome_host = create(:user)
         @other_user = create(:user)
         # create 4 viewing parties each hosted by awesome_host
@@ -190,7 +201,7 @@ RSpec.describe 'User Show Page' do
         # creates viewing party where only the user is invited
         @lonely_viewing_party = create(:viewing_party, host: @user.user_name)
         create(:viewing_party_user, viewing_party: @lonely_viewing_party, user: @user)
-        visit user_path(@user)
+        visit dashboard_path(@user)
       end
       context 'when hosting a viewing party' do
         it 'shows that viewing party on page' do

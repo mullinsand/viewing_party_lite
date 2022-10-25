@@ -1,23 +1,43 @@
 require 'rails_helper'
 
 RSpec.describe 'New Viewing Party' do
-  
-  before :each do
-    VCR.use_cassette('fight_club_movie_data_v1') do
-      @user = create(:user)
-      @friend1 = create(:user)
-      @friend2 = create(:user)
-      @friend3 = create(:user)
-      @frenemy = create(:user)
-      @friends = [@friend1, @friend2, @friend3]
-      fight_club = File.read('spec/fixtures/fight_club.json')
-      movie_data = JSON.parse(fight_club, symbolize_names: true)
-      @movie = Movie.new(movie_data)
-      visit new_user_movie_viewing_party_path(@user, @movie.id)
+  # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+  # allow_any_instance_of(ApplicationController).to receive(:user_id_in_session).and_return(user.id)
+  describe 'as a visitor, when I visit the new viewing party page' do
+    it 'returns me to the landing page with a flash message' do
+      VCR.use_cassette('fight_club_movie_data_v3', allow_playback_repeats: true) do
+        movie_id = 550
+        visit movie_path(movie_id)
+
+        click_button "Create Viewing Party for Fight Club"
+        expect(current_path).to eq(movie_path(movie_id))
+        expect(page).to have_content('You must be logged in to access the viewing party')
+      end
     end
   end
-
+  
   describe 'as a user, when I visit the new viewing party page' do
+    before :each do
+      VCR.use_cassette('fight_club_movie_data_v3') do
+        
+        @user = create(:user, email: 'kit.kat@guhmail.com', password: 'Test')
+        
+        visit login_path
+        fill_in 'Email:', with: @user.email
+        fill_in 'Password:', with: @user.password
+        click_button 'Log In'
+        
+        @friend1 = create(:user)
+        @friend2 = create(:user)
+        @friend3 = create(:user)
+        @frenemy = create(:user)
+        @friends = [@friend1, @friend2, @friend3]
+        fight_club = File.read('spec/fixtures/fight_club.json')
+        movie_data = JSON.parse(fight_club, symbolize_names: true)
+        @movie = Movie.new(movie_data)
+        visit new_dashboard_movie_viewing_party_path(@movie.id)
+      end
+    end
     it 'has the name of the movie rendered above the form' do
       expect(page).to have_content(@movie.title)
     end
@@ -63,7 +83,7 @@ RSpec.describe 'New Viewing Party' do
           end
           click_button 'Create Viewing party'
 
-          expect(current_path).to eq(user_path(@user))
+          expect(current_path).to eq(dashboard_path(@user))
           new_viewing_party = ViewingParty.last
           within "#hosted_parties" do
             expect(page).to have_css("#party_#{new_viewing_party.id}")
@@ -81,12 +101,15 @@ RSpec.describe 'New Viewing Party' do
           end
           click_button 'Create Viewing party'
           new_viewing_party = ViewingParty.last
-          @friends.each do |user|
-            visit user_path(user)
-            within "#invited_parties" do
-              expect(page).to have_css("#party_#{new_viewing_party.id}")
-              expect(page).to have_link(new_viewing_party.movie_title)
-            end
+
+          visit login_path
+          fill_in 'Email:', with: @friend1.email
+          fill_in 'Password:', with: @friend1.password
+          click_button 'Log In'
+
+          within "#invited_parties" do
+            expect(page).to have_css("#party_#{new_viewing_party.id}")
+            expect(page).to have_link(new_viewing_party.movie_title)
           end
         end
       end
@@ -104,5 +127,4 @@ RSpec.describe 'New Viewing Party' do
       # end
     end
   end
-  VCR.eject_cassette
 end
