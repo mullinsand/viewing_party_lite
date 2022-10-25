@@ -53,21 +53,32 @@ RSpec.describe "Landing Page" do
     end
 
     describe 'existing users' do
-      it 'should have a section for existing users' do
-        visit root_path
-
-        within("#existing-users") do
-          expect(page).to have_content("Existing Users")
+      context 'as a visitor' do
+        it 'I do not see a list of existing users' do
+          visit root_path
+          expect(page).to_not have_css("#existing-users")
         end
       end
 
-      it 'should show the user email' do
-        users = User.all
-        visit root_path
+      context 'as a registered (logged in) user' do
+        it 'should have a section for existing users with their emails' do
+          @user = create(:user)
+          users = User.all
+          visit login_path
+          fill_in 'Email:', with: @user.email
+          fill_in 'Password:', with: @user.password
+          click_button 'Log In'
 
-        within("#existing-users") do
-          users.each do |user|
-            expect(page).to have_content(user.email)
+          visit root_path
+  
+          within("#existing-users") do
+            expect(page).to have_content("Existing Users")
+          end
+
+          within("#existing-users") do
+            users.each do |user|
+              expect(page).to have_content(user.email)
+            end
           end
         end
       end
