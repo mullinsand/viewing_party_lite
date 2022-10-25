@@ -5,4 +5,13 @@ class ApplicationController < ActionController::Base
   def set_user
     @user = User.find(session[:user_id]) if session[:user_id]
   end
+
+  def logged_in?
+    @user.present?
+  end
+
+  def login_needed_for(page)
+    flash[:alert] = "You must be logged in to access the #{page}"
+    redirect_back(fallback_location: root_path)
+  end
 end

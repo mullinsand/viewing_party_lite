@@ -1,6 +1,8 @@
 class ViewingPartiesController < ApplicationController
   before_action :set_user, only: %i[new create]
   def new
+    return login_needed_for('viewing party') unless logged_in?
+
     @viewing_party = ViewingParty.new
     @movie = Movie.new(MovieService.get_movie_data(params[:movie_id]))
     @all_users = User.all
