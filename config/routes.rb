@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   match '/register', to: 'users#new', via: :get
   get '/login', to: 'users#login_form'
   post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
   
   resource :dashboard, only: %i[show create], controller: :users do
     resources :movies, only: [:show] do

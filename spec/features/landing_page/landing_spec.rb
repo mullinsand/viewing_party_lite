@@ -72,5 +72,49 @@ RSpec.describe "Landing Page" do
         end
       end
     end
+
+    describe 'As a user when I visit the landing' do
+      it 'I see a Log In button' do
+        visit root_path
+        # save_and_open_page
+        expect(page).to have_button('Log In')
+      end
+    end
+
+    describe 'has log out function' do
+      before :each do 
+        @user = create(:user)
+
+        visit login_path
+        fill_in 'Email:', with: @user.email
+        fill_in 'Password:', with: @user.password
+        click_button 'Log In'
+      end
+
+      context 'when user is logged in' do
+        it 'does not have link to log in or create an account' do
+          visit root_path
+          # save_and_open_page
+          expect(page).to_not have_button('Log In')
+          expect(page).to_not have_button('Create New User')
+        end
+
+        it 'does have a link to log out' do
+          visit root_path
+          # save_and_open_page
+          expect(page).to have_button('Log Out')
+        end
+
+        context 'pressing log out link' do
+          it 'returns user to landing page where log in/register links are active' do
+            visit root_path
+            # save_and_open_page
+            click_button 'Log Out'
+            expect(current_path).to eq(root_path)
+            expect(page).to have_button('Log In')
+          end
+        end
+      end
+    end
   end
 end
